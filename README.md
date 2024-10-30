@@ -1,7 +1,3 @@
-Thank you for the clarification! Below is the corrected version of the API documentation where the routes for borrowing and returning books are specified using the `GET` method.
-
----
-
 # Products API with JWT
 
 ## Overview
@@ -39,8 +35,8 @@ Ensure you have the following installed:
 
 1. **Clone the repository**:
    ```bash
-   git clone ...
-   cd products-api-with-jwt
+   git clone https://github.com/mikorail/golang-library-api.git
+   cd golang-library-api
    ```
 
 2. **Install dependencies**:
