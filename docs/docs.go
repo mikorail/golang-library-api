@@ -15,21 +15,21 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/products": {
+        "/books": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get a list of all products",
+                "description": "Get a list of all books",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "products"
+                    "books"
                 ],
-                "summary": "Get all products",
+                "summary": "Get all books",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -51,7 +51,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Create a new product with the given details",
+                "description": "Create a new book with the given details",
                 "consumes": [
                     "application/json"
                 ],
@@ -59,17 +59,17 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "products"
+                    "books"
                 ],
-                "summary": "Create a new product",
+                "summary": "Create a new book",
                 "parameters": [
                     {
-                        "description": "Product",
-                        "name": "product",
+                        "description": "Book",
+                        "name": "book",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "$ref": "#/definitions/models.Book"
                         }
                     }
                 ],
@@ -95,7 +95,102 @@ const docTemplate = `{
                 }
             }
         },
-        "/products/{id}": {
+        "/books/borrow/{bookId}": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Borrow a book by its ID for the authenticated user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "Borrow a book",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Book ID",
+                        "name": "bookId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ApiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ApiResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.ApiResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ApiResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/books/return": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Return the borrowed book for the authenticated user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "Return a borrowed book",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ApiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ApiResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.ApiResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ApiResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/books/{id}": {
             "get": {
                 "security": [
                     {
@@ -107,13 +202,13 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "products"
+                    "books"
                 ],
                 "summary": "Get product by ID",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Product ID",
+                        "description": "Book ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -146,7 +241,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Update a product's information by its ID",
+                "description": "Update a book's information by its ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -154,24 +249,24 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "products"
+                    "books"
                 ],
-                "summary": "Update a product by ID",
+                "summary": "Update a book by ID",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Product ID",
+                        "description": "Book ID",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "Product",
-                        "name": "product",
+                        "description": "Book",
+                        "name": "book",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "$ref": "#/definitions/models.Book"
                         }
                     }
                 ],
@@ -208,18 +303,18 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Delete a product by its ID",
+                "description": "Delete a book by its ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "products"
+                    "books"
                 ],
-                "summary": "Delete a product by ID",
+                "summary": "Delete a book by ID",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Product ID",
+                        "description": "Book ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -268,23 +363,32 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Product": {
+        "models.Book": {
             "type": "object",
             "properties": {
-                "deskripsi": {
+                "active": {
+                    "type": "boolean"
+                },
+                "author": {
                     "type": "string"
                 },
-                "harga": {
-                    "type": "number"
+                "borrowed": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "namaProduk": {
-                    "type": "string"
-                },
-                "stok": {
+                "stock": {
                     "type": "integer"
+                },
+                "title": {
+                    "type": "string"
                 }
             }
         }
