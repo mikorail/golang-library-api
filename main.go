@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"products-api-with-jwt/config"
 	"products-api-with-jwt/controllers"
 	_ "products-api-with-jwt/docs" // Import docs for Swagger
@@ -9,12 +10,30 @@ import (
 	"products-api-with-jwt/services"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
 	// Setup database (SQLite)
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, continuing with default values.")
+	}
+
+	// Get the port and environment from environment variables
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Default port
+	}
+
+	env := os.Getenv("ENV")
+	if env == "" {
+		env = "development" // Default environment
+	}
+
+	log.Printf("Running in %s mode on port %s", env, port)
+
 	db, err := config.SetupDatabase()
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
@@ -32,7 +51,6 @@ func main() {
 	// Initialize router
 	r := gin.Default()
 	r.Use(middlewares.LoggingMiddleware())
-	r.Use(middlewares.RateLimiterMiddleware())
 
 	// Endpoint login (does not require JWT authentication)
 	auth := r.Group("/auth")
@@ -56,6 +74,6 @@ func main() {
 	// Swagger endpoint
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// Run server on port 8080
-	r.Run(":8080")
+	// Run server on specified port
+	r.Run(":" + port)
 }
